@@ -14,7 +14,8 @@ type Result struct {
 }
 
 func root(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Microservice Architecture course example"))
+	path := r.RequestURI
+	w.Write([]byte(path))
 }
 
 func health(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +23,16 @@ func health(w http.ResponseWriter, r *http.Request) {
 	result.Status = "OK"
 	content, _ := json.Marshal(result)
 	w.Write(content)
+}
+
+func readness(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("true"))
+}
+
+func liveness(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("true"))
 }
 
 func main() {
@@ -36,6 +47,8 @@ func main() {
 		fmt.Println("Listen 8000")
 		http.HandleFunc("/", root)
 		http.HandleFunc("/health", health)
+		http.HandleFunc("/readness", readness)
+		http.HandleFunc("/liveness", liveness)
 		err := http.ListenAndServe(":8000", nil)
 		if err != nil {
 			fmt.Println(err)

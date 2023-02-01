@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  annotations:    
+    nginx.ingress.kubernetes.io/configuration-snippet: "rewrite ^(/otusapp/maksim)(.*) /$2 last;"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "arch.homework"
+      http:
+        paths:        
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: test
+              port:
+                number: 8000
