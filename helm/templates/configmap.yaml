@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.appname}}-config-map
+  labels:
+    app: {{.Values.appname}}
+data:
+  config.yml: |
+    postgres:
+      host: {{.Values.config.postgres.host}}
+      port: {{.Values.config.postgres.port}}
+      dbname: {{.Values.config.postgres.dbname}}

@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.appname}}
+  labels:
+    app: {{.Values.appname}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values.appname}}
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: {{.Values.appname}}
+    spec:
+      volumes:
+        - name: secret
+          secret:
+            secretName: {{.Values.appname}}-secret
+        - name: config
+          configMap:
+            name: {{.Values.appname}}-config-map
+      initContainers:
+      - name: wait-db-init-and-start
+        image: {{.Values.dbimage}}
+        env:
+          - name: PGHOST
+            value: postgres
+        command:
+        - sh
+        - -ec
+        - |
+          until pg_isready; do
+            sleep 1
+          done
+          sleep 3
+      containers:
+      - name: {{.Values.appname}}
+        image: {{.Values.image}}
+        volumeMounts:
+          - name: secret
+            mountPath: /app/secret/
+            readOnly: true
+          - name: config
+            mountPath: /app/config/
+
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: {{.Values.appport}}
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /readness
+            port: {{.Values.appport}}
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+
+        ports:
+        - containerPort: {{.Values.appport}}

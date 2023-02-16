@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    hostname: pg
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: password
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready -U test
+      interval: 3s
+      timeout: 3s
+      retries: 3
+
+  init-db:
+    image: postgres:15
+    command: /init/initdb.sh
+    volumes:
+      - ../migration:/init
+    depends_on:
+      db:
+        condition: service_healthy

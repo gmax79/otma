@@ -1,0 +1,18 @@
+appname: test
+image: gmax079/app:v2
+dbimage: postgres:15
+ingress: arch.homework
+appport: 8000
+
+secret:
+  config:
+    pg_user: test
+    pg_password: password
+
+config:
+  postgres:
+    host: postgres
+    port: 5432
+    dbname: test
+
+

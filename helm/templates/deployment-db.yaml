@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.appname}}-db
+  labels:
+    app: {{.Values.appname}}-db
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values.appname}}-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{.Values.appname}}-db
+    spec:
+      containers:
+      - name: postgres
+        image: {{.Values.dbimage}}
+        env:
+          - name: POSTGRES_DB
+            value: {{.Values.config.postgres.dbname}}
+          - name: POSTGRES_USER
+            value: {{.Values.secret.config.pg_user}}
+          - name: POSTGRES_PASSWORD
+            value: {{.Values.secret.config.pg_password}}
+
+        ports:
+        - containerPort: {{.Values.config.postgres.port}}

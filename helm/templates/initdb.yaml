@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{.Values.appname}}-init-db
+spec:
+  template:
+    metadata:
+      name:  {{.Values.appname}}-init-db
+      labels:
+        app: {{.Values.appname}}-init-postgresdb
+    spec:
+      containers:
+      - image: {{.Values.dbimage}}
+        name: {{.Values.appname}}-init-db
+        command:
+        - sh
+        - -ec
+        - |
+          until pg_isready; do
+            sleep 1
+          done
+          psql -a -f /init/initdb.sql
+        volumeMounts:
+        - name: sql
+          mountPath: /init
+        env:
+          - name: PGHOST
+            value: postgres
+          - name: PGUSER
+            value: {{.Values.secret.config.pg_user}}
+          - name: PGDATABASE 
+            value: {{.Values.config.postgres.dbname}}
+          - name: PGPASSWORD
+            value: {{.Values.secret.config.pg_password}}
+      volumes:
+        - name: sql
+          configMap:
+            name: {{.Values.appname}}-init-db-script
+      restartPolicy: OnFailure

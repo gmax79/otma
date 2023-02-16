@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.appname}}-init-db-script
+  labels:
+    app: {{.Values.appname}}
+data:
+  initdb.sql: |
+    CREATE TABLE IF NOT EXISTS users  (
+      username text PRIMARY KEY,
+      firstname text,
+      lastname text,
+      email text,
+      phone text
+    );
