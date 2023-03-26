@@ -10,3 +10,7 @@ data:
       host: {{.Values.config.postgres.host}}
       port: {{.Values.config.postgres.port}}
       dbname: {{.Values.config.postgres.dbname}}
+    auth:
+      listen: ":8000"
+    app:
+      listen: ":8000"

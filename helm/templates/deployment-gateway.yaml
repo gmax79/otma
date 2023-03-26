@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.gatewayname}}
+  labels:
+    app: {{.Values.gatewayname}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values.gatewayname}}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{.Values.gatewayname}}
+    spec:
+      containers:
+      - name: {{.Values.gatewayname}}
+        image: {{.Values.gatewayimage}}
+
+#        ports:
+#        - containerPort: {{.Values.authport}}

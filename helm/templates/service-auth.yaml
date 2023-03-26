@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.authname}}
+  labels:
+    app: {{.Values.authname}}
+spec:
+  selector:
+    app: {{.Values.authname}}
+  ports:
+  - port: {{.Values.authport}}
+    targetPort: {{.Values.authport}}
+    protocol: TCP

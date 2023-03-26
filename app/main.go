@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/md5"
 	"database/sql"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"net/http"
@@ -12,7 +14,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -21,6 +23,10 @@ type Config struct {
 		Port     int    `yaml:"port"`
 		Database string `yaml:"dbname"`
 	} `yaml:"postgres"`
+
+	App struct {
+		Listen string `yaml:"listen"`
+	} `yaml:"app"`
 }
 
 type Secret struct {
@@ -34,6 +40,11 @@ type User struct {
 	LastName  string `json:"lastname"`
 	Email     string `json:"email"`
 	Phone     string `json:"phone"`
+}
+
+type UserWithPassword struct {
+	User
+	Password string `json:"password"`
 }
 
 type Result struct {
@@ -84,7 +95,7 @@ func getUser(c echo.Context) error {
 }
 
 func createUser(c echo.Context) error {
-	var user User
+	var user UserWithPassword
 	err := c.Bind(&user)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
@@ -94,9 +105,17 @@ func createUser(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "invalid username")
 	}
 
-	request := "INSERT INTO users (username, firstname, lastname, email, phone) VALUES ($1, $2, $3, $4, $5)"
+	if user.Password == "" {
+		return c.String(http.StatusBadRequest, "empty password")
+	}
 
-	_, err = dbconn.Exec(request, user.UserName, user.FirstName, user.LastName, user.Email, user.Phone)
+	hashStr := user.Password + user.UserName
+	crc := md5.Sum([]byte(hashStr))
+	crcStr := hex.EncodeToString(crc[:])
+
+	request := "INSERT INTO users (username, firstname, lastname, email, phone, password) VALUES ($1, $2, $3, $4, $5, $6)"
+
+	_, err = dbconn.Exec(request, user.UserName, user.FirstName, user.LastName, user.Email, user.Phone, crcStr)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
@@ -158,6 +177,8 @@ func readConfig(fpath string, cfg any) error {
 }
 
 func main() {
+	fmt.Println("App service")
+
 	var err error
 	var cfg Config
 	err = readConfig("config/config.yml", &cfg)
@@ -197,21 +218,22 @@ func main() {
 		e.HidePort = true
 		e.HideBanner = true
 		e.Use(middleware.Recover())
+		e.Use(middleware.Logger())
 		e.Pre(middleware.RemoveTrailingSlash())
 		e.GET("/health", health)
 		e.GET("/readness", readness)
 		e.GET("/liveness", liveness)
 
 		// api
-		e.GET("/user/:id", getUser)
 		e.POST("/user", createUser)
+		e.GET("/user/:id", getUser)
 		e.DELETE("/user/:id", deleteUser)
 		e.PUT("/user/:id", updateUser)
 
 		e.GET("/", root)
 
-		fmt.Println("Listen port 8000")
-		if err := e.Start(":8000"); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		fmt.Println("Listen " + cfg.App.Listen)
+		if err := e.Start(cfg.App.Listen); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			err = fmt.Errorf("start server: %w", err)
 			fmt.Println(err)
 			close(sigChan)

@@ -1,0 +1,90 @@
+### bas password login user 1
+POST http://localhost/login
+Content-Type: application/json
+
+{
+    "username": "petrov",
+    "password": "1234"
+}
+
+### login user 1
+POST http://localhost/login
+Content-Type: application/json
+
+{
+    "username": "petrov",
+    "password": "123"
+}
+
+### logout user 1
+POST http://localhost/logout
+Content-Type: application/json
+
+{
+    "username": "petrov"
+}
+
+### random 1
+GET http://localhost/user/unknown/123
+
+### random 2
+GET http://localhost/user/
+
+### get user 1
+GET http://localhost/user/petrov
+
+### get user 2
+GET http://localhost/user/ivanov
+
+### delete user 1
+DELETE http://localhost/user/petrov
+
+### delete user 2>
+DELETE http://localhost/user/ivanov
+
+### add new user 1
+POST http://localhost/user
+Content-Type: application/json
+
+{
+    "username": "petrov",
+    "firstname": "Alex",
+    "lastname": "Petrov",
+    "email": "a.petrov@xmail.com",
+    "phone": "123",
+    "password": "123"
+}
+
+### add new user 2
+POST http://localhost/user
+Content-Type: application/json
+
+{
+    "username": "ivanov",
+    "firstname": "Andrey",
+    "lastname": "Ivanov",
+    "email": "a.ivanov@xmail.com",
+    "phone": "456",
+    "password": "456"
+}
+
+### update user 1
+PUT http://localhost/user/petrov
+Content-Type: application/json
+
+{
+    "firstname": "Alex",
+    "lastname": "Petrov",
+    "email": "a.petrov@zzxz.com",
+    "phone": "789"
+}
+
+### healthcheck
+GET http://localhost:8000/health
+
+### liveness
+GET http://localhost:8000/liveness
+
+### readness
+GET http://localhost:8000/readness
+

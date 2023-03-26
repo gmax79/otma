@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS users  (
 	firstname text,
 	lastname text,
 	email text,
-	phone text
+	phone text,
+	password text
 );

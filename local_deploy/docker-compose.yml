@@ -7,8 +7,6 @@ services:
       POSTGRES_DB: test
       POSTGRES_USER: test
       POSTGRES_PASSWORD: password
-    expose:
-      - "5432"
     ports:
       - "5432:5432"
     healthcheck:
@@ -25,3 +23,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  gateway:
+    image: nginx:1.23.3
+    volumes:
+      - ../files/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    extra_hosts:
+    - "host.docker.internal:host-gateway"

@@ -6,130 +6,13 @@
 	},
 	"item": [
 		{
-			"name": "Health",
+			"name": "Url not from api",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(`\"status\":\"OK\"` );",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://arch.homework/health",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"health"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Rewrite path",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://arch.homework/otusapp/maksim/abc",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"otusapp",
-						"maksim",
-						"abc"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Readness",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"true\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://arch.homework/readness",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"readness"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Liveness",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"true\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://arch.homework/liveness",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"liveness"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Uknown",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 404\", function () {",
+							"pm.test(\"Random api request\", function () {",
 							"    pm.response.to.have.status(404);",
 							"});",
 							""
@@ -142,11 +25,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://arch.homework/some/url/request",
+					"raw": "http://{{baseUrl}}/some/url/request",
 					"protocol": "http",
 					"host": [
-						"arch",
-						"homework"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"some",
@@ -158,15 +40,14 @@
 			"response": []
 		},
 		{
-			"name": "Get Unknown user",
+			"name": "Not authorized request for any name",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Your test name\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.status).to.eql(\"No user\");",
+							"pm.test(\"Non authorized request\", function () {",
+							"    pm.response.to.have.status(401);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -177,28 +58,27 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://arch.homework/user/1",
+					"raw": "http://{{baseUrl}}/user/hello",
 					"protocol": "http",
 					"host": [
-						"arch",
-						"homework"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
-						"1"
+						"hello"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Create User",
+			"name": "Create User 1",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Your test name\", function () {",
+							"pm.test(\"Create user petrov\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.status).to.eql(\"User created\");",
 							"});"
@@ -212,7 +92,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"a.petrov\",\n    \"firstname\": \"andrey\",\n    \"lastname\": \"petrov\",\n    \"email\": \"a.petrov@xmail.com\",\n    \"phone\": \"123-456\"\n}",
+					"raw": "{\n    \"username\": \"a.petrov\",\n    \"firstname\": \"andrey\",\n    \"lastname\": \"petrov\",\n    \"email\": \"a.petrov@xmail.com\",\n    \"phone\": \"123-456\",\n    \"password\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -220,11 +100,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://arch.homework/user",
+					"raw": "http://{{baseUrl}}/user",
 					"protocol": "http",
 					"host": [
-						"arch",
-						"homework"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user"
@@ -234,57 +113,14 @@
 			"response": []
 		},
 		{
-			"name": "Create User 2",
+			"name": "Get User without login",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Your test name\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.status).to.eql(\"User created\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"v.ivanov\",\n    \"firstname\": \"vladimir\",\n    \"lastname\": \"ivanov\",\n    \"email\": \"v.ivanov@ymail.com\",\n    \"phone\": \"789-012\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://arch.homework/user",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get User",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Your test name\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.username).to.eql(\"a.petrov\");",
+							"pm.test(\"Get user without login\", function () {",
+							"    pm.response.to.have.status(401);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -307,11 +143,415 @@
 					}
 				},
 				"url": {
-					"raw": "http://arch.homework/user/a.petrov",
+					"raw": "http://{{baseUrl}}/user/a.petrov",
 					"protocol": "http",
 					"host": [
-						"arch",
-						"homework"
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"a.petrov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User without login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Non authorized update\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"andrey\",\n    \"lastname\": \"petrov\",\n    \"email\": \"a.petrov@xmail.com\",\n    \"phone\": \"000-111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user/a.petrov",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"a.petrov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login with invalid password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login with invalid password\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"incorrect login or password\" );",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"a.petrov\",\n    \"password\": \"abc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/login",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login user\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"logined\" );",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"a.petrov\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/login",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"User updated\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"andrey\",\n    \"lastname\": \"petrov\",\n    \"email\": \"a.petrov@xmail.com\",\n    \"phone\": \"000-111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user/a.petrov",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"a.petrov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check User 1 updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check user updated\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.phone).to.eql(\"000-111\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user/a.petrov",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"a.petrov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login user\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"logout successeded\" );",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/logout",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create user 2\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"User created\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"v.ivanov\",\n    \"firstname\": \"vladimir\",\n    \"lastname\": \"ivanov\",\n    \"email\": \"v.ivanov@ymail.com\",\n    \"phone\": \"789-012\",\n    \"password\": \"456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login user 2\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"logined\" );",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"v.ivanov\",\n    \"password\": \"456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/login",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try Get User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Try Get user 1\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user/a.petrov",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"a.petrov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try Update User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Try Update user 1\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\": \"andrey\",\n    \"lastname\": \"petrov\",\n    \"email\": \"a.petrov@xmail.com\",\n    \"phone\": \"345-111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user/a.petrov",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
@@ -353,147 +593,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://arch.homework/user/v.ivanov",
+					"raw": "http://{{baseUrl}}/user/v.ivanov",
 					"protocol": "http",
 					"host": [
-						"arch",
-						"homework"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
 						"v.ivanov"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update User",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Your test name\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.status).to.eql(\"User updated\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"firstname\": \"andrey\",\n    \"lastname\": \"petrov\",\n    \"email\": \"a.petrov@xmail.com\",\n    \"phone\": \"000-111\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://arch.homework/user/a.petrov",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"user",
-						"a.petrov"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get User updated",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Your test name\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.phone).to.eql(\"000-111\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://arch.homework/user/a.petrov",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"user",
-						"a.petrov"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete User",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"User deleted\" );",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://arch.homework/user/a.petrov",
-					"protocol": "http",
-					"host": [
-						"arch",
-						"homework"
-					],
-					"path": [
-						"user",
-						"a.petrov"
 					]
 				}
 			},
@@ -528,15 +635,96 @@
 					}
 				},
 				"url": {
-					"raw": "http://arch.homework/user/v.ivanov",
+					"raw": "http://{{baseUrl}}/user/v.ivanov",
 					"protocol": "http",
 					"host": [
-						"arch",
-						"homework"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"user",
 						"v.ivanov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user 1 to delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login user\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"logined\" );",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"a.petrov\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/login",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"User deleted\" );",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/user/a.petrov",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"a.petrov"
 					]
 				}
 			},

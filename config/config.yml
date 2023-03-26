@@ -2,3 +2,9 @@ postgres:
   host: localhost
   port: 5432
   dbname: test
+
+auth:
+  listen: ":8100"
+
+app:
+  listen: ":8000"

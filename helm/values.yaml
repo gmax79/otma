@@ -1,8 +1,17 @@
-appname: test
-image: gmax079/app:v2
+appname: app
+authname: auth
+gatewayname: gateway
+
+appimage: gmax079/app:v3
+authimage: gmax079/auth:v1
+gatewayimage: gmax079/gateway:v1 
+
 dbimage: postgres:15
 ingress: arch.homework
+
 appport: 8000
+authport: 8000
+gatewayport: 80
 
 secret:
   config:
