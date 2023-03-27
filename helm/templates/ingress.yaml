@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{.Values.appname}}-ingress
-#  annotations:    
+#  annotations:
 #    nginx.ingress.kubernetes.io/configuration-snippet: "rewrite ^(/otusapp/maksim)(.*) /$2 last;"
 spec:
   ingressClassName: nginx
@@ -14,6 +14,27 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: {{.Values.gatewayname}}
+              name: {{.Values.appname}}
               port:
-                number: {{.Values.gatewayport}}
+                number: {{.Values.appport}}
+        - path: /create
+          pathType: Prefix
+          backend:
+            service:
+              name: {{.Values.appname}}
+              port:
+                number: {{.Values.appport}}
+        - path: /login
+          pathType: Prefix
+          backend:
+            service:
+              name: {{.Values.authname}}
+              port:
+                number: {{.Values.authport}}
+        - path: /logout
+          pathType: Prefix
+          backend:
+            service:
+              name: {{.Values.authname}}
+              port:
+                number: {{.Values.authport}}

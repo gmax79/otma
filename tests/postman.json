@@ -100,13 +100,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{baseUrl}}/user",
+					"raw": "http://{{baseUrl}}/create",
 					"protocol": "http",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
-						"user"
+						"create"
 					]
 				}
 			},
@@ -424,13 +424,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{baseUrl}}/user",
+					"raw": "http://{{baseUrl}}/create",
 					"protocol": "http",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
-						"user"
+						"create"
 					]
 				}
 			},

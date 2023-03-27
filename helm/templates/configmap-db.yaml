@@ -11,5 +11,6 @@ data:
       firstname text,
       lastname text,
       email text,
-      phone text
+      phone text,
+      password text
     );

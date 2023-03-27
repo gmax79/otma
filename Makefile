@@ -2,15 +2,9 @@ build:
 	docker build -f app/Dockerfile -t gmax079/app:v3 .
 	docker build -f auth/Dockerfile -t gmax079/auth:v1 .
 
-build2:
-	cd files && docker build -t gmax079/gateway:v1 .
-
 push:
 	docker push gmax079/app:v3
 	docker push gmax079/auth:v1
-
-push2:
-	docker push gmax079/gateway:v1
 
 local-run:
 	docker run --network host --rm -d --name app -v ./config:/app/config -v ./secret:/app/secret gmax079/app:v3
@@ -45,3 +39,6 @@ install-ingress:
 postgres-port-forwarding:
 	kubectl --namespace m port-forward service/postgres 5432:5432 --address 0.0.0.0
 
+clear-images:
+	minikube image rm gmax079/auth:v1
+	minikube image rm gmax079/app:v3

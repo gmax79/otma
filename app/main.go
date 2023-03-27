@@ -225,7 +225,7 @@ func main() {
 		e.GET("/liveness", liveness)
 
 		// api
-		e.POST("/user", createUser)
+		e.POST("/create", createUser)
 		e.GET("/user/:id", getUser)
 		e.DELETE("/user/:id", deleteUser)
 		e.PUT("/user/:id", updateUser)

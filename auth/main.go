@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"strings"
@@ -112,37 +113,58 @@ func auth(c echo.Context) error {
 	}
 
 	method = strings.ToUpper(method)
-	if method == "POST" {
+	log.Infof("method %s", method)
+
+	h := c.Request().Header
+	log.Infof("headers %v", h)
+
+	/*if method == "POST" {
 		log.Infof("method: %s ", method)
-		return c.NoContent(http.StatusOK) // user create
-	}
+		return c.NoContent(http.StatusOK)
+	}*/
 
 	// PUT - update
 	// GET - read
 	// DELETE - delete
 	// need authorization
 
-	path := getHeader(c, "X-Original-Uri")
+	path := getHeader(c, "X-Original-Url")
 	if path == "" {
+		log.Info("no orignal url")
 		return c.String(http.StatusUnauthorized, "original url")
 	}
 
-	parts := strings.Split(path, "/")
+	u, err := url.Parse(path)
+	if err != nil {
+		log.Info("failed parse url: " + path)
+		return c.String(http.StatusUnauthorized, "parse url")
+	}
+
+	parts := strings.Split(u.Path, "/")
 	if len(parts) != 3 {
-		return c.String(http.StatusUnauthorized, "original url")
+		log.Info("bad path in url: " + u.Path)
+		return c.String(http.StatusUnauthorized, "bad url")
 	}
 
 	userName := parts[2]
 	cookie, err := c.Cookie(appCookieName)
+
+	exist := "exist"
+	if cookie == nil {
+		exist = "nil"
+	}
+
+	log.Infof("user: %s, method: %s, cookie: %s", userName, method, exist)
+
 	if err != nil {
 		return c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	log.Infof("user request: %s, method: %s", userName, method)
-
 	cv := readCookie(cookie.Value)
 	if cv != nil {
 		success := false
+
+		log.Infof("cookie user: %s, ud: %s", cv.Username, cv.UUID)
 
 		mx.Lock()
 		user, ok := cookies[cv.UUID]

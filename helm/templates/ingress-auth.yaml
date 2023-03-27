@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{.Values.appname}}-auth-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: http://auth.m.svc.cluster.local:8000/auth
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{.Values.ingress}}
+      http:
+        paths:        
+        - path: /user
+          pathType: Prefix
+          backend:
+            service:
+              name: {{.Values.appname}}
+              port:
+                number: {{.Values.appport}}
