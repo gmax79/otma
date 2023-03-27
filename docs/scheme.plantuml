@@ -1,0 +1,13 @@
+@startuml
+
+actor User
+rectangle NginxIngress
+rectangle Auth
+rectangle App
+
+User->NginxIngress
+NginxIngress-->Auth: login\nlogout\ncheck permissions
+Auth -> NginxIngress: user\npermissions
+NginxIngress-->App: with permissions\nget,update,delete user  
+
+@enduml

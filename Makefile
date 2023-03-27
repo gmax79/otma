@@ -40,5 +40,4 @@ postgres-port-forwarding:
 	kubectl --namespace m port-forward service/postgres 5432:5432 --address 0.0.0.0
 
 clear-images:
-	minikube image rm gmax079/auth:v1
-	minikube image rm gmax079/app:v3
+	minikube image rm gmax079/auth:v1 gmax079/app:v3
