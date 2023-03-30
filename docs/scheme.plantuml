@@ -4,10 +4,13 @@ actor User
 rectangle NginxIngress
 rectangle Auth
 rectangle App
+rectangle Database
 
 User->NginxIngress
-NginxIngress-->Auth: login\nlogout\ncheck permissions
-Auth -> NginxIngress: user\npermissions
-NginxIngress-->App: with permissions\nget,update,delete user  
+NginxIngress-->Auth: login\nlogout
+Auth<-->NginxIngress: check user\nsession
+NginxIngress-->App: create new user\nor with permissions\nget,update,delete user  
+App-->Database: create new user\n get, update, delete
+Auth<-->Database: check user password
 
 @enduml
